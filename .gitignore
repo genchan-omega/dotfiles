@@ -1,2 +1,5 @@
-# macOS gomi file
+# macOS
 .DS_Store
+
+# secrets
+config/wezterm/assets
