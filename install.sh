@@ -70,6 +70,11 @@ main() {
   # AeroSpace: ファイル単位
   link_file "$DOTFILES_DIR/config/aerospace/aerospace.toml" "$HOME/.config/aerospace/aerospace.toml"
 
+  
+  link_file "$DOTFILES_DIR/config/git/gitconfig" "$HOME/.gitconfig"
+  link_file "$DOTFILES_DIR/config/git/gitignore_global" "$HOME/.gitignore_global"
+
+
   echo "Done."
 }
 
