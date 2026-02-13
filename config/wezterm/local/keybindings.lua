@@ -55,7 +55,13 @@ return { -- 分割：左右 / 上下
   key = "w",
   mods = "CMD|ALT",
   action = act.CloseCurrentPane {
-    confirm = true
+    confirm = false
+  }
+}, {
+  key = "w",
+  mods = "CMD",
+  action = act.CloseCurrentTab {
+    confirm = false
   }
 }, {
   key = "z",
