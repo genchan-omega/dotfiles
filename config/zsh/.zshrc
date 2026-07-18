@@ -21,7 +21,6 @@ alias 'gcc'='gcc-14'
 alias 'g++'='g++-14'
 alias 'nrd'='npm run dev'
 alias ':bbb'='brew update && brew upgrade && brew cleanup'
-alias 'ggg'='git add . && git commit -m "modify a bit" && git push'
 alias 'ls'='eza -TL1'
 alias 'cd'='z'
 
