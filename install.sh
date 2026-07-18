@@ -101,12 +101,17 @@ main() {
     echo "ERROR: missing zsh configuration under $DOTFILES_DIR/config/zsh"
     exit 1
   fi
+  if [ ! -e "$DOTFILES_DIR/config/mise/config.toml" ]; then
+    echo "ERROR: missing mise configuration under $DOTFILES_DIR/config/mise"
+    exit 1
+  fi
 
   # WezTerm: ディレクトリ単位
   link_dir "$DOTFILES_DIR/config/wezterm" "$HOME/.config/wezterm"
 
   # AeroSpace: ファイル単位
   link_file "$DOTFILES_DIR/config/aerospace/aerospace.toml" "$HOME/.config/aerospace/aerospace.toml"
+  link_file "$DOTFILES_DIR/config/mise/config.toml" "$HOME/.config/mise/config.toml"
 
   link_file "$DOTFILES_DIR/config/zsh/.zshrc" "$HOME/.zshrc"
   link_file "$DOTFILES_DIR/config/zsh/.zprofile" "$HOME/.zprofile"

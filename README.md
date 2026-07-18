@@ -69,6 +69,14 @@ It links the shell startup files managed in this repository:
 
 The generated Powerlevel10k appearance file `~/.p10k.zsh` is intentionally left in place and is sourced by `.zshrc`.
 
+### mise
+
+The global mise configuration is linked from:
+
+- `~/.config/mise/config.toml` → `~/.dotfiles/config/mise/config.toml`
+
+It provides the default Node.js version and enables project `.nvmrc` / `.node-version` files for mise.
+
 ### Homebrew
 
 `Brewfile` records the Homebrew packages installed on this Mac. To preview or restore the package set, use:

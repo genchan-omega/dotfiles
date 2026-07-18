@@ -42,10 +42,6 @@ brew "imagemagick"
 brew "jq"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
-# Open-source, cross-platform JavaScript runtime environment
-brew "node"
-# Manage multiple Node.js versions
-brew "nvm"
 # Renders an animated, color, ANSI-text loop of the Poptart Cat
 brew "nyancat"
 # Create, run, and share large language models (LLMs)
