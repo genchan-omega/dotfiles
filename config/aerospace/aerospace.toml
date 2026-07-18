@@ -143,11 +143,11 @@ alt-shift-left = 'move-node-to-monitor --focus-follows-window left'
 # 一時的に有効/非有効
 alt-shift-esc = 'enable toggle'
 
-# windowをswapする
-alt-ctrl-h = 'swap left'
-alt-ctrl-j = 'swap down'
-alt-ctrl-k = 'swap up'
-alt-ctrl-l = 'swap right'
+# 現在のモニター内でフォーカスを移動する
+alt-ctrl-h = 'focus left'
+alt-ctrl-j = 'focus down'
+alt-ctrl-k = 'focus up'
+alt-ctrl-l = 'focus right'
 
 # ScreenSaverを起動する
 alt-cmd-z = 'exec-and-forget sh -lc "open -a ScreenSaverEngine"'
