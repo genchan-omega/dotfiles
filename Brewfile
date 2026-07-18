@@ -1,7 +1,10 @@
 tap "gcenx/wine"
+tap "felixkratz/formulae"
 tap "go-task/tap"
 tap "homebrew/services"
 tap "nikitabobko/tap"
+# Lightweight colored window borders for macOS
+brew "borders"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
 # Cross-platform make

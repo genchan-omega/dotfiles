@@ -12,7 +12,10 @@ after-login-command = []
 # You can use it to add commands that run after AeroSpace startup.
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = []
+after-startup-command = [
+  # JankyBorders: AeroSpaceのフォーカス中ウィンドウを視認しやすくする
+  'exec-and-forget /opt/homebrew/bin/borders style=round active_color=0xff89b4fa inactive_color=0xff45475a width=3.0 hidpi=on',
+]
 
 # Start AeroSpace at login
 start-at-login = true
