@@ -3,17 +3,32 @@ set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 TS="$(date +%Y%m%d-%H%M%S)"
+DRY_RUN=0
+
+run() {
+  if [ "$DRY_RUN" -eq 1 ]; then
+    printf '+ '
+    printf '%q ' "$@"
+    printf '\n'
+  else
+    "$@"
+  fi
+}
 
 backup_if_exists() {
   local path="$1"
   if [ -e "$path" ] || [ -L "$path" ]; then
-    mv "$path" "${path}.bak.${TS}"
-    echo "backup: $path -> ${path}.bak.${TS}"
+    run mv "$path" "${path}.bak.${TS}"
+    if [ "$DRY_RUN" -eq 1 ]; then
+      echo "would back up: $path -> ${path}.bak.${TS}"
+    else
+      echo "backup: $path -> ${path}.bak.${TS}"
+    fi
   fi
 }
 
 ensure_dir() {
-  mkdir -p "$1"
+  run mkdir -p "$1"
 }
 
 link_dir() {
@@ -31,11 +46,15 @@ link_dir() {
   # もし誤って linkname の中に同名リンクが作られていたら消す（今回の事故対策）
   # 例: ~/.config/wezterm/wezterm -> ...
   if [ -L "${linkname}/$(basename "$linkname")" ]; then
-    rm "${linkname}/$(basename "$linkname")"
+    run rm "${linkname}/$(basename "$linkname")"
   fi
 
-  ln -sfn "$target" "$linkname"
-  echo "linked(dir): $linkname -> $target"
+  run ln -sfn "$target" "$linkname"
+  if [ "$DRY_RUN" -eq 1 ]; then
+    echo "would link directory: $linkname -> $target"
+  else
+    echo "linked(dir): $linkname -> $target"
+  fi
 }
 
 link_file() {
@@ -49,11 +68,26 @@ link_file() {
     backup_if_exists "$linkname"
   fi
 
-  ln -sfn "$target" "$linkname"
-  echo "linked(file): $linkname -> $target"
+  run ln -sfn "$target" "$linkname"
+  if [ "$DRY_RUN" -eq 1 ]; then
+    echo "would link file: $linkname -> $target"
+  else
+    echo "linked(file): $linkname -> $target"
+  fi
+}
+
+usage() {
+  echo "Usage: $0 [--dry-run]"
 }
 
 main() {
+  case "${1:-}" in
+    "") ;;
+    --dry-run) DRY_RUN=1 ;;
+    -h|--help) usage; exit 0 ;;
+    *) usage; exit 1 ;;
+  esac
+
   # 事前チェック（実体が存在するか）
   if [ ! -e "$DOTFILES_DIR/config/wezterm" ]; then
     echo "ERROR: missing $DOTFILES_DIR/config/wezterm"
@@ -63,6 +97,10 @@ main() {
     echo "ERROR: missing $DOTFILES_DIR/config/aerospace/aerospace.toml"
     exit 1
   fi
+  if [ ! -e "$DOTFILES_DIR/config/zsh/.zshrc" ] || [ ! -e "$DOTFILES_DIR/config/zsh/.zprofile" ]; then
+    echo "ERROR: missing zsh configuration under $DOTFILES_DIR/config/zsh"
+    exit 1
+  fi
 
   # WezTerm: ディレクトリ単位
   link_dir "$DOTFILES_DIR/config/wezterm" "$HOME/.config/wezterm"
@@ -70,12 +108,14 @@ main() {
   # AeroSpace: ファイル単位
   link_file "$DOTFILES_DIR/config/aerospace/aerospace.toml" "$HOME/.config/aerospace/aerospace.toml"
 
-  
-  link_file "$DOTFILES_DIR/config/git/gitconfig" "$HOME/.gitconfig"
-  link_file "$DOTFILES_DIR/config/git/gitignore_global" "$HOME/.gitignore_global"
+  link_file "$DOTFILES_DIR/config/zsh/.zshrc" "$HOME/.zshrc"
+  link_file "$DOTFILES_DIR/config/zsh/.zprofile" "$HOME/.zprofile"
 
-
-  echo "Done."
+  if [ "$DRY_RUN" -eq 1 ]; then
+    echo "Dry run complete."
+  else
+    echo "Done."
+  fi
 }
 
 main "$@"

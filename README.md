@@ -60,7 +60,27 @@ Once install.sh completes successfully, you should have:
 
 - A configured AeroSpace setup under ~/.config/aerospace/aerospace.toml (backed by this repo)
 
-If the target files/directories already exist, the installer may rename them to *.bak.<timestamp> before creating symlinks.
+### zsh
+
+It links the shell startup files managed in this repository:
+
+- `~/.zshrc` → `~/.dotfiles/config/zsh/.zshrc`
+- `~/.zprofile` → `~/.dotfiles/config/zsh/.zprofile`
+
+The generated Powerlevel10k appearance file `~/.p10k.zsh` is intentionally left in place and is sourced by `.zshrc`.
+
+### Homebrew
+
+`Brewfile` records the Homebrew packages installed on this Mac. To preview or restore the package set, use:
+
+```bash
+brew bundle check --file=~/.dotfiles/Brewfile
+brew bundle --file=~/.dotfiles/Brewfile
+```
+
+If the target files/directories already exist, the installer may rename them to *.bak.<timestamp> before creating symlinks. Preview its actions first with `./install.sh --dry-run`.
+
+The installer intentionally does not modify `~/.gitconfig` or other global Git settings.
 
 ## Notes
 - This repository is tailored to my environment and may require adjustments on your machine.
