@@ -1,6 +1,10 @@
 # Place a copy of this config to ~/.aerospace.toml
 # After that, you can edit ~/.aerospace.toml to your liking
 
+# AeroSpaceの現行設定仕様を使う。空のworkspace 1〜10も明示的に維持する。
+config-version = 2
+persistent-workspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+
 # It's not necessary to copy all keys to your config.
 # If the key is missing in your config, "default-config.toml" will serve as a fallback
 
@@ -186,9 +190,47 @@ p = [
   'move-workspace-to-monitor --workspace 5 main',
   'move-workspace-to-monitor --workspace 6 main',
   'move-workspace-to-monitor --workspace 7 main',
-  'move-workspace-to-monitor --workspace 9 secondary 2',
+  'move-workspace-to-monitor --workspace 8 main',
+  'move-workspace-to-monitor --workspace 9 main',
+  'workspace 1', # workspace 1 にfocusを当てる
   'move-workspace-to-monitor --workspace 10 secondary 2',
-  'move-workspace-to-monitor --workspace 8 secondary 2',  # workspace 8 にfocusを当てる
+  'workspace 10', # workspace 10 にfocusを当てる
+  'mode main',
+]
+
+slash = [
+  # 起動状態に関係なく、全ワークスペースを既定のモニター配置へ戻す
+  'move-workspace-to-monitor --workspace 1 main',
+  'move-workspace-to-monitor --workspace 2 main',
+  'move-workspace-to-monitor --workspace 3 main',
+  'move-workspace-to-monitor --workspace 4 main',
+  'move-workspace-to-monitor --workspace 5 main',
+  'move-workspace-to-monitor --workspace 6 main',
+  'move-workspace-to-monitor --workspace 7 main',
+  'move-workspace-to-monitor --workspace 8 main',
+  'move-workspace-to-monitor --workspace 9 main',
+  'move-workspace-to-monitor --workspace 10 secondary 2',
+  # 既に開いている対象アプリの全ウィンドウを、対応するworkspaceへ戻す
+  'exec-and-forget for id in $(/opt/homebrew/bin/aerospace list-windows --all --app-bundle-id company.thebrowser.Browser --format "%{window-id}"); do /opt/homebrew/bin/aerospace move-node-to-workspace --window-id "$id" 1; done',
+  'exec-and-forget for id in $(/opt/homebrew/bin/aerospace list-windows --all --app-bundle-id com.github.wez.wezterm --format "%{window-id}"); do /opt/homebrew/bin/aerospace move-node-to-workspace --window-id "$id" 2; done',
+  'exec-and-forget for id in $(/opt/homebrew/bin/aerospace list-windows --all --app-bundle-id com.brave.Browser --format "%{window-id}"); do /opt/homebrew/bin/aerospace move-node-to-workspace --window-id "$id" 3; done',
+  'exec-and-forget for id in $(/opt/homebrew/bin/aerospace list-windows --all --app-bundle-id com.tinyspeck.slackmacgap --format "%{window-id}"); do /opt/homebrew/bin/aerospace move-node-to-workspace --window-id "$id" 4; done',
+  'exec-and-forget for id in $(/opt/homebrew/bin/aerospace list-windows --all --app-bundle-id jp.naver.line.mac --format "%{window-id}"); do /opt/homebrew/bin/aerospace move-node-to-workspace --window-id "$id" 5; done',
+  'exec-and-forget for id in $(/opt/homebrew/bin/aerospace list-windows --all --app-bundle-id com.hnc.Discord --format "%{window-id}"); do /opt/homebrew/bin/aerospace move-node-to-workspace --window-id "$id" 6; done',
+  'exec-and-forget for id in $(/opt/homebrew/bin/aerospace list-windows --all --app-bundle-id com.openai.codex --format "%{window-id}"); do /opt/homebrew/bin/aerospace move-node-to-workspace --window-id "$id" 7; done',
+  'exec-and-forget for id in $(/opt/homebrew/bin/aerospace list-windows --all --app-bundle-id com.junjieruan.digitalclock --format "%{window-id}"); do /opt/homebrew/bin/aerospace move-node-to-workspace --window-id "$id" 10; done',
+  'exec-and-forget for id in $(/opt/homebrew/bin/aerospace list-windows --all --app-bundle-id company.thebrowser.dia --format "%{window-id}"); do /opt/homebrew/bin/aerospace move-node-to-workspace --window-id "$id" 10; done',
+  # 未起動なら開く。-gで前面化を避け、最後はworkspace 1を表示したままにする
+  'exec-and-forget open -g -a Arc.app',
+  'exec-and-forget open -g -a WezTerm.app',
+  'exec-and-forget open -g -a "Brave Browser.app"',
+  'exec-and-forget open -g -a Slack.app',
+  'exec-and-forget open -g -a LINE.app',
+  'exec-and-forget open -g -a Discord.app',
+  'exec-and-forget open -g -a ChatGPT.app',
+  'exec-and-forget open -g -a DigitalClock.app',
+  'exec-and-forget open -g -a Dia.app',
+  'workspace 1', # 準備後はメイン作業用のworkspace 1に戻る
   'mode main',
 ]
 
@@ -213,6 +255,8 @@ run = "move-node-to-workspace 3"
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
 run = "move-node-to-workspace 4"
+# LINEは起動時のネットワーク状態により再認証を求める場合がある。
+# このルール自体は起動せず、表示されたLINEのウィンドウをworkspace 5へ移す。
 [[on-window-detected]]
 if.app-id = 'jp.naver.line.mac'
 run = "move-node-to-workspace 5"
@@ -220,5 +264,11 @@ run = "move-node-to-workspace 5"
 if.app-id = 'com.hnc.Discord'
 run = "move-node-to-workspace 6"
 [[on-window-detected]]
+if.app-id = 'com.openai.codex'
+run = "move-node-to-workspace 7"
+[[on-window-detected]]
 if.app-id = 'com.junjieruan.digitalclock'
-run = "move-node-to-workspace 8"
+run = "move-node-to-workspace 10"
+[[on-window-detected]]
+if.app-id = 'company.thebrowser.dia'
+run = "move-node-to-workspace 10"
